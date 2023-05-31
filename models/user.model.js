@@ -1,20 +1,29 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  userName: {
-    type: String,
-    required: true,
+const userSchema = new mongoose.Schema(
+  {
+    userName: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      required: true,
+      default: "user",
+    },
+    favStories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Story",
+      },
+    ],
   },
-  role: {
-    type: String,
-    enum: ["user", "admin"],
-    required: true,
-  },
-  favStories: {
-    type: Array,
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 const User = mongoose.model("User", userSchema);
 
