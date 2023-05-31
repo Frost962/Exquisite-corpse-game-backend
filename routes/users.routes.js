@@ -1,4 +1,4 @@
-const express = require("mongoose");
+const express = require("express");
 const router = express.Router();
 
 const User = require("../models/user.model");
@@ -17,7 +17,7 @@ router.patch("/:id", isAuthenticated, async (req, res, next) => {
         .json({ message: `user: ${userName} is not available` });
     }
     const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
+      id,
       { email, userName: userName },
       { new: true }
     );
@@ -28,7 +28,7 @@ router.patch("/:id", isAuthenticated, async (req, res, next) => {
 });
 
 // update role
-router.patch("/:id", isAuthenticated, isAdmin, async (req, res, next) => {
+router.patch("/role/:id", isAuthenticated, isAdmin, async (req, res, next) => {
   try {
     const { id } = req.params;
     const { role } = req.body;
@@ -49,8 +49,8 @@ router.delete("/:id", isAdmin, async (req, res, next) => {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     console.log("A user has been deleted:", deletedUser);
     if (!deletedUser) {
-      return res.json({
-        message: `could not match any document with the id ${req.params.id}`,
+      return res.status(404).json({
+        message: `Could not match any document with the id ${req.params.id}`,
       });
     }
     res.json({ message: `deleted document with id ${req.params.id}` });
