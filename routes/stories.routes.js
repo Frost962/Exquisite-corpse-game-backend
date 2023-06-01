@@ -1,14 +1,24 @@
+//Require Dependencies:-
+//imports the Express.js framework, creates a router, the router object will be used to define the routes for handling various requests.
 const express = require("express");
 const router = express.Router();
 
+//Require Models and Middleware:
+//imports the Story model, the Story model represents the structure of a story in the application.
+//The isAuthenticated middleware is used to check if a user is authenticated before allowing access to certain routes.
 const Story = require("../models/story.model");
 const isAuthenticated = require("../middleware/isAuthenticated");
 
+//Create a New Story:
+//When a POST request is made to this route, it expects a JSON payload containing title,
+//creator, and contributors properties in the request body.
 router.post("/", isAuthenticated, async (req, res, next) => {
   const { title, creator, contributors } = req.body;
   try {
     console.log(req.body);
+    // Create a new story using the Story model and provided data
     const createdStory = await Story.create({ title, creator });
+    // Send a JSON response with the created story
     res
       .status(201)
       .json({ message: "You just started a story", story: createdStory });
@@ -17,15 +27,23 @@ router.post("/", isAuthenticated, async (req, res, next) => {
   }
 });
 
+//Delete a Story:
+//This code defines a DELETE route at the path "/:id" of the router.
+//It expects an id parameter in the URL.
+//This route also requires the user to have administrative privileges (assumed isAdmin middleware is defined elsewhere).
+
 router.delete("/:id", isAdmin, async (req, res, next) => {
   try {
+    // Find and delete a story by ID
     const deletedStory = await Story.findByIdAndDelete(req.params.id);
     console.log("A story has been deleted:", deletedStory);
     if (!deletedStory) {
+      // If no story is found, send a 404 response with an error message
       return res.status(404).json({
         message: `Could not match any document with the id ${req.params.id}`,
       });
     }
+    // Send a JSON response with a success message
     res.json({ message: `deleted story with id ${req.params.id}` });
   } catch (error) {
     next(error);
@@ -36,7 +54,9 @@ router.get("/", getAllStories);
 
 async function getAllStories(req, res, next) {
   try {
+    // Find all stories
     const allStories = await Story.find();
+    // Send a JSON response with all stories
     res.json(allStories);
   } catch (error) {
     next(error);
@@ -45,7 +65,9 @@ async function getAllStories(req, res, next) {
 
 router.get("/:id", async (req, res, next) => {
   try {
+    // Find a story by ID
     const oneStory = await Story.findById(req.params.id);
+    // Send a JSON response with the found story
     res.json(oneStory);
   } catch (error) {
     next(error);
@@ -55,12 +77,12 @@ router.get("/:id", async (req, res, next) => {
 router.get("/user/:userId", isAuthenticated, async (req, res, next) => {
   const { userId } = req.params;
   try {
-    // Fetch the stories where the user is the creator or a contributor
+    // Find stories where the user is the creator or a contributor
     const stories = await Story.find({
       $or: [{ creator: userId }, { contributors: userId }],
     });
 
-    // Send these stories back as a res
+    // Send a JSON response with the found stories
     res.json(stories);
   } catch (error) {
     next(error);
