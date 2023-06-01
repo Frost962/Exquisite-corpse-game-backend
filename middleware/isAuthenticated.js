@@ -10,7 +10,7 @@ async function isAuthenticated(req, res, next) {
     if (!token) {
       return res.status(400).json({ message: "No token found" });
     }
-    // Remove Bearer to verify the token
+    // Remove Bearer to verify git the token
     token = token.replace("Bearer ", "");
     console.log(token);
     // Verification of the token
