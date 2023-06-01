@@ -1,6 +1,9 @@
-const isAuthenticated = require("../middleware/isAuthenticated");
+const { isAuthenticated } = require("../middleware/jwt.middleware.js");
+const { isAdmin } = require("../middleware/isAdmin.js");
+const express = require("express");
+const router = express.Router();
 
-router.post("/", async (req, res, next) => {
+router.post("/", isAuthenticated, async (req, res, next) => {
   try {
     const { creator, content, storyId } = req.body;
     const newChapter = { creator, content, storyId };
@@ -11,7 +14,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", isAdmin, async (req, res, next) => {
   try {
     await Chapter.findByIdAndDelete(req.params.id);
     res.json({ message: "Chapter Deleted" });
@@ -20,7 +23,7 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.patch("/:id", async (req, res, next) => {
+router.patch("/:id", isAdmin, async (req, res, next) => {
   try {
     const { content } = req.body;
     const updatedChapter = await Chapter.findByIdAndUpdate(

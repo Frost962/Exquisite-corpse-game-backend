@@ -4,6 +4,9 @@ const express = require("express");
 // creating a router to define routes and endpoints later
 const router = express.Router();
 
+const { isAuthenticated } = require("../middleware/jwt.middleware");
+const { isAdmin } = require("../middleware/isAdmin");
+
 // importing the user model from the user.model.js file:
 const User = require("../models/user.model");
 
