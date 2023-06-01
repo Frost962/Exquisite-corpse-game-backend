@@ -1,5 +1,7 @@
+// import the Mongoose library:
 const mongoose = require("mongoose");
 
+// creates a new Mongoose schema for the User model
 const userSchema = new mongoose.Schema(
   {
     userName: {
@@ -13,6 +15,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: "user",
     },
+    // array of favorite stories associated with the user.
+    // It uses a reference to the "Story" model. Each element in the array
+    // is an ObjectId referencing a specific story document in the "Story" collection
     favStories: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -21,6 +26,8 @@ const userSchema = new mongoose.Schema(
     ],
   },
   {
+    // adds two additional fields to the schema: createdAt and updatedAt.
+    // These fields store the timestamp when the document was created and last updated
     timestamps: true,
   }
 );
