@@ -7,12 +7,10 @@ const bcrypt = require("bcrypt");
 // ℹ️ Handles password encryption
 const jwt = require("jsonwebtoken");
 
+const { isAuthenticated } = require("../middleware/jwt.middleware");
+
 // Require the User model in order to interact with the database
 const User = require("../models/user.model");
-
-// Require necessary (isAuthenticated) middleware in order to control access to specific routes
-const { isAuthenticated } = require("../middleware/jwt.middleware.js");
-const { isAdmin } = require("../middleware/isAdmin.js");
 
 // How many rounds should bcrypt run the salt (default - 10 rounds)
 const saltRounds = 10;
@@ -27,7 +25,7 @@ router.post("/signup", (req, res, next) => {
     return;
   }
 
-  // This regular expression check that the email is of a valid format
+  /*   // This regular expression check that the email is of a valid format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   if (!emailRegex.test(email)) {
     res.status(400).json({ message: "Provide a valid email address." });
@@ -43,7 +41,7 @@ router.post("/signup", (req, res, next) => {
     });
     return;
   }
-
+ */
   // Check the users collection if a user with the same email already exists
   User.findOne({ email })
     .then((foundUser) => {
@@ -59,15 +57,15 @@ router.post("/signup", (req, res, next) => {
 
       // Create the new user in the database
       // We return a pending promise, which allows us to chain another `then`
-      return User.create({ email, password: hashedPassword, name });
+      return User.create({ email, password: hashedPassword, userName });
     })
     .then((createdUser) => {
       // Deconstruct the newly created user object to omit the password
       // We should never expose passwords publicly
-      const { email, name, _id } = createdUser;
+      const { email, userName, _id } = createdUser;
 
       // Create a new object that doesn't expose the password
-      const user = { email, name, _id };
+      const user = { email, userName, _id };
 
       // Send a json response containing the user object
       res.status(201).json({ user: user });

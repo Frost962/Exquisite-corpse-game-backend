@@ -2,13 +2,22 @@ const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 const { isAdmin } = require("../middleware/isAdmin.js");
 const express = require("express");
 const router = express.Router();
+const Chapter = require("../models/chapter.model.js");
+const Story = require("../models/story.model.js");
 
-router.post("/", isAuthenticated, async (req, res, next) => {
+router.post("/:storyId/", isAuthenticated, async (req, res, next) => {
   try {
-    const { creator, content, storyId } = req.body;
-    const newChapter = { creator, content, storyId };
-    await newChapter.create(newChapter);
-    res.json(newChapter);
+    const { content } = req.body;
+    const { _id } = req.payload;
+    const { storyId } = req.params;
+    const newChapter = { creator: _id, content, storyId };
+    const createdChapter = await Chapter.create(newChapter);
+    const updatedStory = await Story.findByIdAndUpdate(storyId, {
+      $addToSet: {
+        contributors: _id,
+      },
+    });
+    res.json(createdChapter);
   } catch (error) {
     next(error);
   }
@@ -36,19 +45,5 @@ router.patch("/:id", isAdmin, async (req, res, next) => {
     next(error);
   }
 });
-
-router.get(
-  "/story/:storyId/chapters",
-  isAuthenticated,
-  async (req, res, next) => {
-    const { storyId } = req.params;
-    try {
-      const chapters = await Chapter.find({ storyId: storyId });
-      res.json(chapters);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
 module.exports = router;
