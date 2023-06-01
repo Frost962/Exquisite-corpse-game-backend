@@ -11,17 +11,39 @@ const express = require("express");
 
 const app = express();
 
+const cors = require("cors");
+const authRoutes = require("./routes/auth.routes");
+const chapterRoutes = require("./routes/chapters.routes");
+const userRoutes = require("./routes/users.routes");
+const storyRoutes = require("./routes/stories.routes");
+
+app.use(express.json());
+app.use(cors({ origin: "*" }));
+
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
 
 // 👇 Start handling routes here
-const indexRoutes = require("./routes/index.routes");
-app.use("/api", indexRoutes);
 
-const authRoutes = require("./routes/auth.routes");
 app.use("/auth", authRoutes);
+app.use("/chapters", chapterRoutes);
+app.use("/stories", storyRoutes);
+app.use("/users", userRoutes);
 
-// ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
-require("./error-handling")(app);
+const test = [
+  {
+    userName: "Moe",
+    role: "Admin",
+  },
+];
+
+app.get("/test", (req, res) => {
+  res.json(test);
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("Fatal error your computer will explode in 5 seconds");
+});
 
 module.exports = app;
