@@ -29,21 +29,6 @@ app.use("/auth", authRoutes);
 app.use("/chapters", chapterRoutes);
 app.use("/stories", storyRoutes);
 app.use("/users", userRoutes);
-
-const test = [
-  {
-    userName: "Moe",
-    role: "Admin",
-  },
-];
-
-app.get("/test", (req, res) => {
-  res.json(test);
-});
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Fatal error your computer will explode in 5 seconds");
-});
+app.use(require("./error-handling")(app));
 
 module.exports = app;
