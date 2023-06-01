@@ -3,11 +3,13 @@
 const express = require("express");
 const router = express.Router();
 
+const { isAuthenticated } = require("../middleware/jwt.middleware");
+const { isAdmin } = require("../middleware/isAdmin");
+
 //Require Models and Middleware:
 //imports the Story model, the Story model represents the structure of a story in the application.
 //The isAuthenticated middleware is used to check if a user is authenticated before allowing access to certain routes.
 const Story = require("../models/story.model");
-const isAuthenticated = require("../middleware/isAuthenticated");
 
 //Create a New Story:
 //When a POST request is made to this route, it expects a JSON payload containing title,
