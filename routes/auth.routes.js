@@ -17,6 +17,8 @@ const saltRounds = 10;
 
 // POST /auth/signup  - Creates a new user in the database
 router.post("/signup", (req, res, next) => {
+  console.log("teeeeeeeeeeeeeeeeeeeeeeeessssssssssssssssssssssssss");
+
   const { email, password, userName } = req.body;
 
   // Check if email or password or name are provided as empty strings
