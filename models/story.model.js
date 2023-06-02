@@ -20,7 +20,7 @@ const storySchema = new mongoose.Schema({
 // we need a bit of code to push contributors in this array whenever a chapter is created if their id is not alrdy in it
 // maybe we also need a 'first prompt' property for the starting sentence that directs chatgpt?
 
-const Story = mongoose.model("Chapter", storySchema);
+const Story = mongoose.model("Story", storySchema);
 
 module.exports = Story;
 
