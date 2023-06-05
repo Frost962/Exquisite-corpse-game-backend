@@ -14,14 +14,14 @@ const app = express();
 
 require("./config")(app);
 
-const cors = require("cors");
+//const cors = require("cors");
 const authRoutes = require("./routes/auth.routes");
 const chapterRoutes = require("./routes/chapters.routes");
 const userRoutes = require("./routes/users.routes");
 const storyRoutes = require("./routes/stories.routes");
 
 app.use(express.json());
-app.use(cors({ origin: "*" }));
+//app.use(cors({ origin: "*" }));
 
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 
