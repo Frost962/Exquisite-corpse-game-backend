@@ -89,7 +89,12 @@ router.get("/user/:userId", isAuthenticated, async (req, res, next) => {
       $or: [{ creator: userId }, { contributors: userId }],
     })
       .populate("creator", "userName")
-      .populate("contributors", "userName");
+ frf
+      .populate("contributors", "userName")
+      .then((stories) => {
+        res.json(stories);
+      });
+
 
     // Send a JSON response with the found stories
     res.json(stories);
