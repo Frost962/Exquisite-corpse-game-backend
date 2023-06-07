@@ -23,6 +23,16 @@ router.post("/:storyId/", isAuthenticated, async (req, res, next) => {
   }
 });
 
+router.get("/:storyId", isAuthenticated, async (req, res, next) => {
+  try {
+    const { storyId } = req.params;
+    const chapters = await Chapter.find({ storyId });
+    res.json(chapters);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete("/:id", isAdmin, async (req, res, next) => {
   try {
     await Chapter.findByIdAndDelete(req.params.id);
