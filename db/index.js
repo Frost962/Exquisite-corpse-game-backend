@@ -6,7 +6,8 @@ const mongoose = require("mongoose");
 // If no env has been set, we dynamically set it to whatever the folder name was upon the creation of the app
 
 // should connect to exquisite corpse, if not to nvm
-const MONGO_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/nvm";
+const MONGO_URI =
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/Exquisite-corpse";
 
 mongoose
   .connect(MONGO_URI)

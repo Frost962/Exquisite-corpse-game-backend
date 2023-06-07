@@ -28,6 +28,12 @@ const seed = async () => {
         email: "A",
         password: "A",
       },
+      {
+        userName: "paul",
+        email: "paul",
+        password:
+          "$2b$10$PkaZnaYHkiZs8DwH0ZlWYOu6pynmp90G2yXE.Y8CBK5KgFzW5DAg.",
+      },
     ]);
 
     const stories = await Story.create([
@@ -44,7 +50,7 @@ const seed = async () => {
       {
         title: "The even greater story",
         creator: users[0]._id,
-        contributors: [users[2]._id, users[1]._id],
+        contributors: [users[2]._id, users[1]._id, "647f2d64e7cc9b28d5d1c438"],
       },
     ]);
 
