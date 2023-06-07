@@ -87,7 +87,12 @@ router.get("/user/:userId", isAuthenticated, async (req, res, next) => {
     // Find stories where the user is the creator or a contributor
     const stories = await Story.find({
       $or: [{ creator: userId }, { contributors: userId }],
-    });
+    })
+      .populate("creator", "userName")
+      .populate("contributors", "userName")
+      .then((stories) => {
+        res.json(stories);
+      });
 
     // Send a JSON response with the found stories
     res.json(stories);
