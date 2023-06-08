@@ -17,6 +17,7 @@ const Chapter = require("../models/chapter.model");
 //creator, and contributors properties in the request body.
 router.post("/", isAuthenticated, async (req, res, next) => {
   const { title } = req.body;
+  console.log(req.payload);
   try {
     // Create a new story using the Story model and provided data
     const createdStory = await Story.create({
